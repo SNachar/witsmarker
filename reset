@@ -1,0 +1,8 @@
+#!/bin/bash
+killall MATLAB
+killall matlabd
+killall sleep
+killall tail
+rm /tmp/mlpipe
+rm /tmp/mat*
+rm /tmp/mloutpipe

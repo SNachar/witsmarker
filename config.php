@@ -16,9 +16,10 @@ class settings {
 
     public static $temp;        ///< Prefix for temp folder
     public static $keep_files;  ///< Delete folders when the marker completes
-
+    public static $markers;
 }
 
 settings::$temp = "/tmp/marker";
 settings::$keep_files = true;
+settings::$markers = "/var/www/mark";
 ?>

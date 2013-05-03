@@ -100,6 +100,8 @@ class program_file {
             $value = str_replace("~sourcefile~", $this->sourcefile, $value);
             $value = str_replace("~sourcefile_noex~", $this->filename, $value);
             $value = str_replace("~input~", "input", $value);
+            $value = str_replace("~markers~", settings::$markers, $value);
+            $value = str_replace("~path~", $this->path, $value);
 
             $temp[$key] = $value;
         }

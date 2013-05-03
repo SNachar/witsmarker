@@ -24,4 +24,4 @@ done
 
 # Try kill the program, if kill is successful, echo that it was running
 # TODO: Make sure that the PID isn't reused!!!
-kill $i 2>/dev/null && echo -n "Time limit exceeded" >&2
+kill -2 $i 2>/dev/null && echo -n "Time limit exceeded" >&2

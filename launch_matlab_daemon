@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Check if the pipe exists
+if [[ ! -p /tmp/mlpipe ]]; then
+        mkfifo /tmp/mlpipe;
+fi
+
+if [[ -z "$(lsof /tmp/mlpipe)" ]]; then
+	echo "Launching Matlab"
+        MATLAB="matlab -nodesktop -nosplash;"
+        CMD="tail -f /tmp/mlpipe | $MATLAB 1> /tmp/matlab.out 2>/tmp/matlab.err &"
+
+        nohup bash -c "$CMD" &>/tmp/matlab.nohup
+        sleep inf &
+        echo "disp(datestr(now));kill($!,9);" >/tmp/mlpipe;
+        wait &>/dev/null
+fi
+
