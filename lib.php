@@ -52,7 +52,8 @@ class program_file {
     public $sourcefile; ///< Replaces sourcefile in commands
     public $id;         ///< Submission ID
     public $commands;   ///< Commands with Keywords Replaced
-    public $tests;       ///< Tests with Keywords Replaced    
+    public $tests;       ///< Tests with Keywords Replaced  
+    public $timelimit;
 
     /**
      * Constructor
@@ -61,12 +62,13 @@ class program_file {
      * @param string $input Optional Input data to be written to file
      */
 
-    function program_file($lang, $sourcecode, $input = "") {
+    function program_file($lang, $sourcecode, $input = "", $timelimit) {
         // Get filename extension from $lang
         $this->extension = $lang['extension'];
         // All files are called source
         $this->filename = "source";
         $this->sourcefile = "$this->filename.$this->extension";
+        $this->timelimit = $timelimit;
 
         // Get the Submission ID
         $this->id = uniqid("", $more_entropy = true);
@@ -102,6 +104,7 @@ class program_file {
             $value = str_replace("~input~", "input", $value);
             $value = str_replace("~markers~", settings::$markers, $value);
             $value = str_replace("~path~", $this->path, $value);
+            $value = str_replace("~timeout~", $this->timelimit, $value);
 
             $temp[$key] = $value;
         }
@@ -231,10 +234,11 @@ function mark($language, $sourcecode, $input, $output, $timelimit) {
     $languages = json_decode($string, true);
 
     $lang = $languages[$language];
-    $code = new program_file($lang, $sourcecode, $input);
+    $code = new program_file($lang, $sourcecode, $input, $timelimit);
 
     foreach ($code->commands as $key => $command) {
         //$runner = (strpos($key, 'run')==0);
+        $walker = ($key == "walk");
         $runner = (($key=="run")||(strpos($key, "time")===0));
         if ($runner) {
             $outputs = run($code->path, $command, $input, $timelimit);
@@ -253,7 +257,7 @@ function mark($language, $sourcecode, $input, $output, $timelimit) {
         }
     }
 
-    if ($runner) {
+    if ($runner || $walker) {
         if(strpos($outputs["stderr"], 'Time limit exceeded') != FALSE){
             $outputs["result"] = result_time_limit;
         } else {

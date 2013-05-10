@@ -55,11 +55,11 @@ if [[ -z "$(lsof /tmp/mlpipe)" ]]; then
 	wait &>/dev/null
 fi
 
-sleep 10 &
-if [[ -f "$*" ]]; then
-	sed -u "1d;\$a\\kill($!,9)\\;" "$*" >/tmp/mlpipe
+sleep $2 &
+if [[ -f "$1" ]]; then
+	sed -u "1d;\$a\\kill($!,9)\\;" "$1" >/tmp/mlpipe
 else
-	CMD="disp('`sed -e "s/'/''/g" <<<$*`');try,$*,catch ME,disp(['ERROR: ' ME.message]);end;"
+	CMD="disp('`sed -e "s/'/''/g" <<<$1`');try,$1,catch ME,disp(['ERROR: ' ME.message]);end;"
 	echo "$CMD,kill($!,9);" >/tmp/mlpipe
 fi
 wait &>/dev/null

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+killall MATLAB
+killall matlabd
+killall sleep
+killall tail
+rm -f /tmp/mlpipe
+rm -f /tmp/mat*
+rm -f /tmp/mloutpipe
+
+if [[ ! -p /tmp/mlpipe ]]; then
+	mkfifo /tmp/mlpipe;
+fi
+
+if [[ -z "$(lsof /tmp/mlpipe)" ]]; then
+	tail -f /tmp/mlpipe | matlab -nodesktop -nosplash -r "addpath('/var/www/mark')"
+fi
+

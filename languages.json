@@ -86,11 +86,9 @@
         "name": "matlab",
         "extension": "m",
         "commands": {
-            "makeTester" : "printf \"clear;\\ncd ~path~\\ncd(~path~)\\noutfile = sprintf('outfile.tmp');\\nfh = fopen(outfile, 'w');\\nstr = evalc('test()');\\nfprintf(fh, '%%s', str);\\nfclose(fh);\\n\" > tester.m",
+            "makeTester" : "printf \"clear;\\ncd ~path~\\noutfile = sprintf('outfile.tmp');\\nfh = fopen(outfile, 'w');\\nstr = 'Time Limit Exceeded';\\nstr = evalc('test()');\\nfprintf(fh, '%%s', str);\\nfclose(fh);\\n\" > tester.m",
             "makeCaller" : "printf \"\\n\\n\" | cat ~input~ - ~sourcefile~ > test.m",
-            "time0": "~markers~/matlabd tester.m",
-            "killer": "killall -2 MATLAB",
-	    "unpause": "killall -2 sleep",
+            "matlabd": "~markers~/matlabd tester.m ~timeout~",
 	    "run": "cat outfile.tmp"
         }
     }
